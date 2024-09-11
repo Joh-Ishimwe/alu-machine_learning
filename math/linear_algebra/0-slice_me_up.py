@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# Slicing the array
 arr = [9, 8, 2, 3, 9, 4, 1, 0, 3]
 arr1 = arr[:2]  # First two numbers
 arr2 = arr[-5:]  # Last five numbers
