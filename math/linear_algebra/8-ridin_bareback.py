@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
-"""
-Who is riding bareback?
-"""
+"""Function that multiplies 2 matrices"""
 
 
 def mat_mul(mat1, mat2):
     """
-    Multiplies two matrices
+    Arguments:
+    2 matrices
+
+    Returns:
+    The product matrix
     """
     if len(mat1[0]) != len(mat2):
         return None
-    return [[sum(a * b for a, b in zip(mat1_row, mat2_col))
-             for mat2_col in zip(*mat2)]
-            for mat1_row in mat1]
+
+    result = [[0 for _ in range(len(mat2[0]))] for _ in range(len(mat1))]
+
+    for i in range(len(mat1)):
+        for j in range(len(mat2[0])):
+            for k in range(len(mat2)):
+                result[i][j] += mat1[i][k] * mat2[k][j]
+
+    return result
