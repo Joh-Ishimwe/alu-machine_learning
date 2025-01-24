@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-""" Deep Neural Network """
+""" Deep Neural Network
+"""
 
 import numpy as np
 
@@ -47,14 +48,15 @@ class DeepNeuralNetwork:
             # Zero initialization
             self.__weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
 
+    # add getter method
     @property
     def L(self):
-        """ Return layers in the neural network """
+        """ Return layers in the neural network"""
         return self.__L
 
     @property
     def cache(self):
-        """ Return dictionary with intermediate values of the network """
+        """ Return dictionary with intermediate values of the network"""
         return self.__cache
 
     @property
@@ -67,16 +69,21 @@ class DeepNeuralNetwork:
 
         Args:
             X (numpy.array): Input array with
-            shape (nx, m) = (features, no of examples)
+            shape (nx, m) = (featurs, no of examples)
         """
-        self.__cache["A0"] = X
-        for i in range(1, self.L + 1):
-            W = self.weights['W' + str(i)]
-            b = self.weights['b' + str(i)]
-            A_prev = self.cache['A' + str(i - 1)]
-            Z = np.matmul(W, A_prev) + b
-            self.__cache["A" + str(i)] = 1 / (1 + np.exp(-Z))
-        return self.cache["A" + str(self.L)], self.cache
+        self.cache["A0"] = X
+        # print(self.cache)
+        for i in range(1, self.L+1):
+            # extract values
+            W = self.weights['W'+str(i)]
+            b = self.weights['b'+str(i)]
+            A = self.cache['A'+str(i - 1)]
+            # do forward propagation
+            z = np.matmul(W, A) + b
+            sigmoid = 1 / (1 + np.exp(-z))  # this is the output
+            # store output to the cache
+            self.cache["A"+str(i)] = sigmoid
+        return self.cache["A"+str(i)], self.cache
 
     def cost(self, Y, A):
         """ Calculate the cost of the Neural Network.
@@ -86,24 +93,49 @@ class DeepNeuralNetwork:
             A (numpy.array): predicted values of the neural network
 
         Returns:
-            cost (float): the cost of the predictions
+            _type_: _description_
         """
-        m = Y.shape[1]
-        cost = -(1 / m) * np.sum(Y * np.log(A)
-                                 + (1 - Y) * np.log(1.0000001 - A))
+        loss = -(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
+        cost = np.mean(loss)
         return cost
 
     def evaluate(self, X, Y):
-        """ Evaluates the neural network's predictions
+        """ Evaluate the neural network
 
         Args:
-            X (numpy.ndarray): Input data with shape (nx, m)
-            Y (numpy.ndarray): Correct labels with shape (1, m)
+            X (numpy.array): Input array
+            Y (numpy.array): Actual values
 
         Returns:
-            tuple: Predicted labels and the cost of the network
+            prediction, cost: return predictions and costs
         """
-        A, _ = self.forward_prop(X)
-        cost = self.cost(Y, A)
-        predictions = np.where(A >= 0.5, 1, 0)
-        return predictions, cost
+        self.forward_prop(X)
+        # get output of the neural network from the cache
+        output = self.cache.get("A" + str(self.L))
+        return np.where(output >= 0.5, 1, 0), self.cost(Y, output)
+
+    def gradient_descent(self, Y, cache, alpha=0.05):
+        """ Calculate one pass of gradient descent on the neural network
+
+        Args:
+            Y (numpy.array): Actual values
+            cache (dict): Dictionary containing all intermediary values of the
+                          network
+            alpha (float): learning rate
+        """
+        m = Y.shape[1]
+        for i in range(self.L, 0, -1):
+
+            A_prev = cache["A" + str(i - 1)]
+            A = cache["A" + str(i)]
+            W = self.__weights["W" + str(i)]
+
+            if i == self.__L:
+                dz = A - Y
+            else:
+                dz = da * (A * (1 - A))
+            db = dz.mean(axis=1, keepdims=True)
+            dw = np.matmul(dz, A_prev.T) / m
+            da = np.matmul(W.T, dz)
+            self.__weights['W' + str(i)] -= (alpha * dw)
+            self.__weights['b' + str(i)] -= (alpha * db)
