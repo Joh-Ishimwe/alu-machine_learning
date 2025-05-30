@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
+<<<<<<< HEAD
 """
 This module contains a function to fetch home planets of sentient species
 from the Swapi API.
 """
+=======
+"""Pipeline Api"""
+>>>>>>> d01a612edafbcb20b156d4f8e219d7deae1f7d56
 import requests
 
 
 def sentientPlanets():
+<<<<<<< HEAD
     """
     Returns a list of names of home planets of all sentient species.
 
@@ -49,3 +54,20 @@ def sentientPlanets():
             unique_planets.append(planet)
 
     return unique_planets
+=======
+    """returns the list of names of the home planets of all sentient species"""
+    url = "https://swapi-api.hbtn.io/api/species"
+    r = requests.get(url)
+    world_list = []
+    while r.status_code == 200:
+        for species in r.json()["results"]:
+            url = species["homeworld"]
+            if url is not None:
+                ur = requests.get(url)
+                world_list.append(ur.json()["name"])
+        try:
+            r = requests.get(r.json()["next"])
+        except Exception:
+            break
+    return world_list
+>>>>>>> d01a612edafbcb20b156d4f8e219d7deae1f7d56

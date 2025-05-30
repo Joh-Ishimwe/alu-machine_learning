@@ -22,4 +22,8 @@ BEGIN
     INSERT INTO corrections (user_id, project_id, score) VALUES (p_user_id, project_id, p_score);
 END $$
 
+<<<<<<< HEAD
 DELIMITER ;
+=======
+DELIMITER ;
+>>>>>>> d01a612edafbcb20b156d4f8e219d7deae1f7d56

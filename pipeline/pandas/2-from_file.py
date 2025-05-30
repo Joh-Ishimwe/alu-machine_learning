@@ -18,4 +18,8 @@ def from_file(filename, delimiter):
             - Returns: the loaded pd.DataFrame
     '''
 
+<<<<<<< HEAD
     return pd.read_csv(filename, delimiter=delimiter)
+=======
+    return pd.read_csv(filename, delimiter=delimiter)
+>>>>>>> d01a612edafbcb20b156d4f8e219d7deae1f7d56

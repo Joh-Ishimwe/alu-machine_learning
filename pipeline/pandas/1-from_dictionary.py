@@ -30,4 +30,8 @@ dictionary = {
 }
 
 # Create the DataFrame
+<<<<<<< HEAD
 df = pd.DataFrame(dictionary, index=['A', 'B', 'C', 'D'])
+=======
+df = pd.DataFrame(dictionary, index=['A', 'B', 'C', 'D'])
+>>>>>>> d01a612edafbcb20b156d4f8e219d7deae1f7d56

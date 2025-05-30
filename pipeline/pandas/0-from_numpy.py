@@ -31,4 +31,8 @@ def from_numpy(array):
     # Create the DataFrame
     df = pd.DataFrame(array, columns=columns)
 
+<<<<<<< HEAD
     return df
+=======
+    return df
+>>>>>>> d01a612edafbcb20b156d4f8e219d7deae1f7d56
